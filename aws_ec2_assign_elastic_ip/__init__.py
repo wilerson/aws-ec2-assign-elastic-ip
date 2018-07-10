@@ -112,7 +112,8 @@ def _get_unassociated_address():
     """
     eip = None
 
-    for address in ec2_client.describe_addresses().get('Addresses', []):
+    addresses = ec2_client.describe_addresses(Filters=_build_tags_filter())
+    for address in addresses.get('Addresses', []):
         # Check if the address is associated
         if address.get('InstanceId'):
             logger.debug('{0} is already associated with {1}'.format(
@@ -205,3 +206,19 @@ def _is_valid(address):
             return True
 
     return False
+
+
+def _build_tags_filter():
+    """ Creates a filter list to be used in the IP lookup
+
+    :returns: list -- list of filters containing the tags from the arguments
+    """
+    if not args.tags:
+        return []
+
+    filters = []
+    for tag_pair in args.tags.split(','):
+        key, value = tag_pair.split(':', 2)
+        filters.append({'Name': 'tag:{0}'.format(key), 'Values': [value]})
+
+    return filters

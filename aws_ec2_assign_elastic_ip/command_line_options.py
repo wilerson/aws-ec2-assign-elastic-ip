@@ -56,6 +56,14 @@ PARSER.add_argument(
         '- 58.0.0.0/8\n'
         '- 123.213.0.0/16,58.0.0.0/8,195.234.023.0\n'
         '- 195.234.234.23,195.234.234.24\n'))
+PARSER.add_argument(
+    '--tags',
+    help=(
+        'A comma separated list of tags (in key:value format) that a valid '
+        'EIP should have to be vaild to be used for assigning an ip.\n'
+        'Valid examples:\n'
+        '- ENV:STAGING\n'
+        '- ENV:STAGING,NAME:FOO\n'))
 ARGS = PARSER.parse_args()
 
 if ARGS.version:
